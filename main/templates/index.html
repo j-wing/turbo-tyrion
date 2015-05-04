@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Current Graph Scores</title>
+</head>
+<body>
+    <table style="width:50%" border="1">
+        <thead>
+            <tr>
+                <td>Graph ID:</td>
+                <td>Filename: </td>
+                <td>Best score: </td>
+                <td>Currently running?</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for graph in graphs %}
+            <tr>
+                <td>{{graph.pk}}</td>
+                <td>{{graph.input_filename}}</td>
+                <td>{{graph.current_best.path_cost|default:"&infin;"}}</td>
+                <td>{{graph.is_running|yesno}}</td>
+            </tr>
+        {%endfor%}
+        </tbody>
+    </table>
+</body>
+</html>
