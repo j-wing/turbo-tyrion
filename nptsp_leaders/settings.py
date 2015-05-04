@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 # ~Infinite for now, until we get a good idea of what this should be.
 GRAPH_CLAIM_EXPIRATION = datetime.timedelta(days=7)
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "tests")
+
 # Application definition
 
 INSTALLED_APPS = (

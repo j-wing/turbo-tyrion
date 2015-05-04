@@ -18,7 +18,14 @@
             <tr>
                 <td>{{graph.pk}}</td>
                 <td>{{graph.input_filename}}</td>
-                <td>{{graph.current_best.path_cost|default:"&infin;"}}</td>
+                <td>
+                    {% if graph.current_best %}
+                        {{graph.current_best.path_cost}} with {{graph.current_best.algo.name}}
+                        <br />
+                        Command:<i>{{graph.current_best.algo.command}}</i>
+                    {% else %}
+                        &infin;
+                    {%endif %}</td>
                 <td>{{graph.is_running|yesno}}</td>
             </tr>
         {%endfor%}

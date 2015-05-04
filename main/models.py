@@ -1,4 +1,4 @@
-import os
+import os, time
 from django.db import models
 from django.conf import settings
 
@@ -8,7 +8,10 @@ def get_path(relpath):
     """
         Returns the absolute path to a directory relative to the current directory.
     """
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), relpath))
+    return os.path.join(settings.MEDIA_ROOT, relpath)
+
+def get_output_name(instance, filename):
+    return "outputs/%s_%s" % (int(time.time()), instance.algo.pk)
 
 class Algorithm(models.Model):
     name = models.CharField(max_length=255)
@@ -22,7 +25,7 @@ class GraphScore(models.Model):
     path_cost = models.IntegerField()
     path = models.TextField()
     graph = models.ForeignKey('InputGraph')
-    output_filename = models.FilePathField(max_length=PATH_MAX_LEN, path=get_path("outputs"))
+    output_file = models.FileField(upload_to=get_output_name, null=True, blank=True)
 
     def __unicode__(self):
         return "Score of %s on %s" % (path_cost, graph)

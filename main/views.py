@@ -3,10 +3,11 @@ import datetime
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, F
 from django.http import Http404, HttpResponse
+from django.core.files.base import ContentFile
 
 
 from .utils import JSONResponse
-from .models import InputGraph
+from .models import InputGraph, Algorithm, GraphScore
 
 def index(request):
     """
@@ -46,9 +47,29 @@ def add_result(request, graph_id):
     """
         Adds a score from the result of an algorithm.
     """
-    if request.method != "POST":
-        raise Http404, "Must add a result using POST"
+    # if request.method != "POST":
+    #     raise Http404, "Must add a result using POST"
 
     graph = get_object_or_404(InputGraph, pk=graph_id)
+    post = request.GET
 
-    # score = GraphScore    
+    if post.get('algorithm_id'):
+        algo = Algorithm.objects.get(pk=post['algorithm_id'])
+    else:
+        try:
+            algo = Algorithm.objects.get(command=post['algorithm_command'])
+        except Algorithm.DoesNotExist:
+            algo = Algorithm(name=post['algorithm_name'], command=post['algorithm_command'])
+            algo.save()
+    
+    score = GraphScore(algo=algo, graph=graph, path_cost=int(post['path_cost']), path=post['path'], output_file=ContentFile(post['out']))
+    score.save()
+
+    new_leader = False
+    if graph.current_best is None or score.path_cost < graph.current_best.path_cost:
+        graph.current_best = score
+        new_leader = True
+    graph.last_run_end = datetime.datetime.now()
+    graph.save()
+
+    return JSONResponse({'success':True, 'score_id':score.pk, 'graph_id':graph.pk, 'algo_id':algo.pk, 'new_leader':new_leader})
