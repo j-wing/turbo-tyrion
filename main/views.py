@@ -62,7 +62,8 @@ def add_result(request, graph_id):
             algo = Algorithm(name=post['algorithm_name'], command=post['algorithm_command'])
             algo.save()
     
-    score = GraphScore(algo=algo, graph=graph, path_cost=int(post['path_cost']), path=post['path'], output_file=ContentFile(post['out']))
+    score = GraphScore(algo=algo, graph=graph, path_cost=int(post['path_cost']), path=post['path'])
+    score.output_file.save("", ContentFile(post['out']))
     score.save()
 
     new_leader = False

@@ -11,7 +11,7 @@ def get_path(relpath):
     return os.path.join(settings.MEDIA_ROOT, relpath)
 
 def get_output_name(instance, filename):
-    return "outputs/%s_%s" % (int(time.time()), instance.algo.pk)
+    return "outputs/%s_%s.out" % (int(time.time()), instance.algo.pk)
 
 class Algorithm(models.Model):
     name = models.CharField(max_length=255)
@@ -28,7 +28,7 @@ class GraphScore(models.Model):
     output_file = models.FileField(upload_to=get_output_name, null=True, blank=True)
 
     def __unicode__(self):
-        return "Score of %s on %s" % (path_cost, graph)
+        return "Score of %s on %s" % (self.path_cost, self.graph)
 
 
 class InputGraph(models.Model):
