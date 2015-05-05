@@ -58,6 +58,9 @@ def add_result(request, graph_id):
     else:
         try:
             algo = Algorithm.objects.get(command=post['algorithm_command'])
+            if algo.name != post['algorithm_name']:
+                algo.name = post['algorithm_name']
+                algo.save()
         except Algorithm.DoesNotExist:
             algo = Algorithm(name=post['algorithm_name'], command=post['algorithm_command'])
             algo.save()
