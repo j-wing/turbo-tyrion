@@ -49,11 +49,11 @@ def add_result(request, graph_id):
     """
         Adds a score from the result of an algorithm.
     """
-    # if request.method != "POST":
-    #     raise Http404, "Must add a result using POST"
+    if request.method != "POST":
+        raise Http404, "Must add a result using POST"
 
     graph = get_object_or_404(InputGraph, pk=graph_id)
-    post = request.GET
+    post = request.POST
 
     if post.get('algorithm_id'):
         algo = Algorithm.objects.get(pk=post['algorithm_id'])
