@@ -1,6 +1,7 @@
 import os, time
 from django.db import models
 from django.conf import settings
+from django.db.models import Q, F
 
 PATH_MAX_LEN = 255
 
@@ -42,6 +43,18 @@ class InputGraph(models.Model):
 
     def __unicode__(self):
         return self.input_filename
+
+    @staticmethod
+    def get_not_running_Q():
+        return Q(last_run_start=None) | Q(last_run_end__gt=F("last_run_start"))
+
+    @classmethod
+    def get_running(cls):
+        return cls.objects.exclude(cls.get_not_running_Q())
+
+    @classmethod
+    def get_not_running(cls):
+        return cls.objects.filter(cls.get_not_running_Q())
 
     def is_running(self):
         if self.last_run_start is None:

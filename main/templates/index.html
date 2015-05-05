@@ -4,6 +4,20 @@
     <title>Current Graph Scores</title>
 </head>
 <body>
+    <h4>
+        Current stats:
+        <br />
+        {{num_running}} graphs running now.
+        <br />
+        {{num_solved}} have solutions.
+        <br />
+        The most successful algorithms so far:
+        <ol>
+            {% for algo in best_algos %}
+            <li>{{algo.name}} with {{algo.num_solved}} solved.</li>
+            {% endfor %}
+        </ol>
+    </h4>
     <table style="width:50%" border="1">
         <thead>
             <tr>
