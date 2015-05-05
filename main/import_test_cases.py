@@ -19,7 +19,7 @@ def main(dir, is_test=False):
             shutil.copyfile(path, target)
             print "Creating new input graph..."
             g = InputGraph.objects.create(input_filename=name, is_test_graph=is_test)
-            added = g
+            added.append(g)
     print "Done. "
     print "Created %s new objects: " % len(added)
     print added
