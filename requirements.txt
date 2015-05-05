@@ -1,4 +1,4 @@
-Django==1.8.1
+Django==1.7
 flup==1.0.2
 psycopg2==2.6
 simplejson==3.6.5
