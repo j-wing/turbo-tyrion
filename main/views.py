@@ -67,10 +67,18 @@ def add_result(request, graph_id):
     score.save()
 
     new_leader = False
-    if graph.current_best is None or score.path_cost < graph.current_best.path_cost:
+    current_best = None if graph.current_best is None else graph.current_best.path_cost
+    if current_best is None or score.path_cost < current_best:
         graph.current_best = score
         new_leader = True
     graph.last_run_end = datetime.datetime.now()
     graph.save()
 
-    return JSONResponse({'success':True, 'score_id':score.pk, 'graph_id':graph.pk, 'algo_id':algo.pk, 'new_leader':new_leader})
+    return JSONResponse({
+        'success':True, 
+        'score_id':score.pk, 
+        'graph_id':graph.pk, 
+        'algo_id':algo.pk, 
+        'new_leader':new_leader,
+        'lead_score':current_best
+    })
