@@ -31,13 +31,15 @@ def claim_new_graphs(request):
     test_only = bool(request.GET.get("test_only", False))
 
     if test_only:
-        ids = InputGraph.objects.filter(is_test_graph=True).order_by('-current_best__path_cost')
+        ids = InputGraph.objects.filter(is_test_graph=True).order_by('num_vars')
 
     else:
-        graphs = InputGraph.get_not_running().exclude(is_test_graph=True).order_by('last_run_start', "-current_best__path_cost")[:number]
+        graphs = InputGraph.get_not_running().exclude(is_test_graph=True).filter(last_run_end=None).order_by(
+            'num_vars', "-current_best__path_cost")[:number]
         ids = [g.pk for g in graphs]
         if len(graphs) < number:
-            from_all = InputGraph.objects.exclude(id__in=ids).order_by("-current_best__path_cost")[:(number - len(graphs))]
+            from_all = InputGraph.objects.exclude(id__in=ids).exclude(is_test_graph=True).order_by(
+                    "-current_best__path_cost")[:(number - len(graphs))]
 
             ids.extend([g.pk for g in from_all])
         
