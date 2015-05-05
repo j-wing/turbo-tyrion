@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, F
 from django.http import Http404, HttpResponse
 from django.core.files.base import ContentFile
+from django.views.decorators.csrf import csrf_exempt
 
 
 from .utils import JSONResponse
@@ -43,6 +44,7 @@ def get_graph(request, graph_id):
         resp = HttpResponse(f.read(), content_type="text/plain")
     return resp
 
+@csrf_exempt
 def add_result(request, graph_id):
     """
         Adds a score from the result of an algorithm.
