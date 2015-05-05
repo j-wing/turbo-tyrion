@@ -42,6 +42,8 @@ class InputGraph(models.Model):
         return self.input_filename
 
     def is_running(self):
+        if self.last_run_start is None:
+            return False
         return (self.last_run_start and self.last_run_end is None) or (self.last_run_start > self.last_run_end) \
                 or (self.last_run_end - self.last_run_start > settings.GRAPH_CLAIM_EXPIRATION)
 
