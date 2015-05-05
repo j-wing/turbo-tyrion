@@ -8,7 +8,8 @@
         <thead>
             <tr>
                 <td>Graph ID:</td>
-                <td>Filename: </td>
+                <td>Num Vars:</td>
+                <td>Input Filename: </td>
                 <td>Best score: </td>
                 <td>Currently running?</td>
             </tr>
@@ -17,6 +18,7 @@
         {% for graph in graphs %}
             <tr>
                 <td>{{graph.pk}}</td>
+                <td>{{graph.num_vars}}</td>  
                 <td>{{graph.input_filename}}</td>
                 <td>
                     {% if graph.current_best %}

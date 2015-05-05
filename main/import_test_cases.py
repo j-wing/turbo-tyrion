@@ -1,4 +1,5 @@
-import os, shutil, sys, argparse
+#!/usr/bin/env python
+import os, shutil, sys, argparse, time
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 print os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -17,8 +18,13 @@ def main(dir, is_test=False):
             target = os.path.join(get_path("inputs"), name)
             print "Moving input file from %s to %s..." % (path, target)
             shutil.copyfile(path, target)
-            print "Creating new input graph..."
-            g = InputGraph.objects.create(input_filename=name, is_test_graph=is_test)
+            with open(target) as f:
+                # Get the number of variables in the graph
+                # Per the spec, this is the first line of a valid input file.
+                num_vars = int(f.readline().replace("\n", ""))
+            print "Creating new input graph with %s vars..." % num_vars
+            time.sleep(1)
+            g = InputGraph.objects.create(input_filename=name, is_test_graph=is_test, num_vars=num_vars)
             added.append(g)
     print "Done. "
     print "Created %s new objects: " % len(added)
