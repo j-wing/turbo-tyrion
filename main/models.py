@@ -38,6 +38,7 @@ class InputGraph(models.Model):
     last_run_start = models.DateTimeField(null=True, blank=True)
     last_run_end = models.DateTimeField(null=True, blank=True)
     is_test_graph = models.BooleanField(default=False)
+    num_vars = models.IntegerField()
 
     def __unicode__(self):
         return self.input_filename
