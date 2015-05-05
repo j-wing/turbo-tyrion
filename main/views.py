@@ -29,8 +29,9 @@ def claim_new_graphs(request):
                                     "-is_test_graph", "-current_best__path_cost")[:number]
         ids = [g.pk for g in graphs]
         if len(graphs) < number:
-            graphs.extend(InputGraph.objects.exclude(id__in=ids).order_by("-current_best__path_cost")[:(number - len(graphs))])
-            ids = [g.pk for g in graphs]
+            from_all = InputGraph.objects.exclude(id__in=ids).order_by("-current_best__path_cost")[:(number - len(graphs))]
+
+            ids.extend([g.pk for g in from_all])
         
         InputGraph.objects.filter(pk__in=ids).update(last_run_start=datetime.datetime.now())
     return JSONResponse({'success':True, 'graph_ids':ids})
