@@ -25,7 +25,7 @@ def claim_new_graphs(request):
     else:
         graphs = InputGraph.objects.filter(
                                     Q(last_run_start=None) | Q(last_run_start__gt=F("last_run_end"))).order_by(
-                                    "-current_best__path_cost")[:number]
+                                    "-is_test_graph", "-current_best__path_cost")[:number]
         ids = [g.pk for g in graphs]
         if len(graphs) < number:
             graphs.extend(InputGraph.objects.exclude(id__in=ids).order_by("-current_best__path_cost")[:(number - len(graphs))])
