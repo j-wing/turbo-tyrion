@@ -89,3 +89,13 @@ def add_result(request, graph_id):
         'new_leader':new_leader,
         'lead_score':current_best
     })
+
+@csrf_exempt
+def unclaim(request, graph_id):
+    graph = get_object_or_404(InputGraph, pk=graph_id)
+    # Reset these values so the graph will be claimed again.
+    graph.last_run_end = None
+    graph.last_run_start = None
+
+    graph.save()
+    return JSONResponse({'success':True})
