@@ -26,6 +26,7 @@ class GraphScore(models.Model):
     path = models.TextField()
     graph = models.ForeignKey('InputGraph')
     output_file = models.FileField(upload_to=get_output_name, null=True, blank=True)
+    runtime = models.IntegerField()
 
     def __unicode__(self):
         return "Score of %s on %s" % (self.path_cost, self.graph)
