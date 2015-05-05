@@ -12,6 +12,7 @@
                 <td>Input Filename: </td>
                 <td>Best score: </td>
                 <td>Currently running?</td>
+                <td>Test graph?</td>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +30,7 @@
                         &infin;
                     {%endif %}</td>
                 <td>{{graph.is_running|yesno}}</td>
+                <td><b>{{graph.is_test_graph|yesno}}</b></td>
             </tr>
         {%endfor%}
         </tbody>
