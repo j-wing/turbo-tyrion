@@ -14,7 +14,8 @@ def index(request):
     """
         Renders the current leaderboard of algorithms.
     """
-    return render(request, "index.html", {'graphs':InputGraph.objects.all()})
+    return render(request, "index.html", {'graphs':InputGraph.objects.all().order_by(
+                                    "-is_test_graph", "num_vars", "-current_best__path_cost")})
 
 def claim_new_graphs(request):
     number = int(request.GET.get("number", 1))
@@ -26,7 +27,7 @@ def claim_new_graphs(request):
     else:
         graphs = InputGraph.objects.filter(
                                     Q(last_run_start=None) | Q(last_run_start__gt=F("last_run_end"))).order_by(
-                                    "-is_test_graph", "-current_best__path_cost")[:number]
+                                    "-is_test_graph", "num_vars", "-current_best__path_cost")[:number]
         ids = [g.pk for g in graphs]
         if len(graphs) < number:
             from_all = InputGraph.objects.exclude(id__in=ids).order_by("-current_best__path_cost")[:(number - len(graphs))]
