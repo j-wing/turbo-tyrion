@@ -16,14 +16,18 @@ def index(request):
         Renders the current leaderboard of algorithms.
     """
     graphs = InputGraph.objects.all().order_by("-is_test_graph", "num_vars", "-current_best__path_cost")
+    total_graphs = graphs.count()
     num_running = InputGraph.get_running().count()
     num_solved = InputGraph.objects.exclude(current_best=None).count()
+    percent_solved = round(10000 * float(num_solved) / float(total_graphs)) / 100
     best_algos = Algorithm.objects.annotate(num_solved=Count("graphscore__graph__current_best")).order_by("-num_solved")[:3]
     return render(request, "index.html", {
         'graphs':graphs, 
         'num_running':num_running,
         'num_solved':num_solved,
-        'best_algos':best_algos
+        'best_algos':best_algos,
+        'percent_solved':percent_solved,
+        'total_graphs':total_graphs
         })
 
 def claim_new_graphs(request):
