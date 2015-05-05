@@ -23,7 +23,7 @@ def main(dir, is_test=False):
                 # Per the spec, this is the first line of a valid input file.
                 num_vars = int(f.readline().replace("\n", ""))
             print "Creating new input graph with %s vars..." % num_vars
-            time.sleep(1)
+            # time.sleep(1)
             g = InputGraph.objects.create(input_filename=name, is_test_graph=is_test, num_vars=num_vars)
             added.append(g)
     print "Done. "
