@@ -1,3 +1,3 @@
 [submodule "main/tsp"]
 	path = main/tsp
-	url = git@bitbucket.org:ketkar/tsp.git
+	url = https://bitbucket.org/ketkar/tsp.git
