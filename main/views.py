@@ -73,7 +73,7 @@ def add_result(request, graph_id):
     if not valid:
         return JSONResponse({
             'success':False,
-            'error':'Invalid path.'
+            'error':'Invalid path.',
             'code':1,
             'reason':reason
         })
