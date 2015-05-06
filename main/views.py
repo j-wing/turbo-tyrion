@@ -95,22 +95,30 @@ def add_result(request, graph_id):
     score.output_file.save("", ContentFile(post['out']))
     score.save()
 
-    new_leader = False
+    is_new_leader = False
     current_best = None if graph.current_best is None else graph.current_best.path_cost
     if current_best is None or score.path_cost < current_best:
         graph.current_best = score
-        new_leader = True
+        is_new_leader = True
     graph.last_run_end = datetime.datetime.now()
     graph.save()
-
-    return JSONResponse({
+    data = {
         'success':True, 
         'score_id':score.pk, 
         'graph_id':graph.pk, 
         'algo_id':algo.pk, 
-        'new_leader':new_leader,
-        'lead_score':current_best
-    })
+        'new_leader':is_new_leader,
+    }
+
+    if current_best is not None:
+        data.update({
+            'lead_score':current_best,
+            'lead_runtime':graph.current_best.runtime
+        })
+
+
+    return JSONResponse(data)
+
 
 @csrf_exempt
 def unclaim(request, graph_id):
