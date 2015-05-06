@@ -69,6 +69,14 @@ def add_result(request, graph_id):
 
     graph = get_object_or_404(InputGraph, pk=graph_id)
     post = request.POST
+    valid, reason = graph.verify_solution(post['path'], post['path_cost'])
+    if not valid:
+        return JSONResponse({
+            'success':False,
+            'error':'Invalid path.'
+            'code':1,
+            'reason':reason
+        })
 
     if post.get('algorithm_id'):
         algo = Algorithm.objects.get(pk=post['algorithm_id'])

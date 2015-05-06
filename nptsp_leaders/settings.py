@@ -27,7 +27,7 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 # ~Infinite for now, until we get a good idea of what this should be.
-GRAPH_CLAIM_EXPIRATION = datetime.timedelta(days=7)
+GRAPH_CLAIM_EXPIRATION = datetime.timedelta(days=1)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "tests")
 
