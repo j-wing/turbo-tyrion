@@ -90,6 +90,8 @@ def add_result(request, graph_id):
     path_cost = int(post['path_cost'])
     valid, reason = graph.verify_solution(post['path'], path_cost)
     if not valid:
+        # Unclaim the graph.
+        graph.unclaim()
         return JSONResponse({
             'success':False,
             'error':'Invalid path.',
@@ -141,9 +143,5 @@ def add_result(request, graph_id):
 @csrf_exempt
 def unclaim(request, graph_id):
     graph = get_object_or_404(InputGraph, pk=graph_id)
-    # Reset these values so the graph will be claimed again.
-    graph.last_run_end = None
-    graph.last_run_start = None
-
-    graph.save()
+    graph.unclaim()
     return JSONResponse({'success':True})

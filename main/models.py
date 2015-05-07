@@ -67,12 +67,19 @@ class InputGraph(models.Model):
     def get_input_abspath(self):
         return os.path.join(get_path("inputs"), self.input_filename)
 
+    def unclaim(self):
+        # Reset these values so the graph will be claimed again.
+        self.last_run_end = None
+        self.last_run_start = None
+
+        self.save()
+
     def verify_solution(self, path, est_cost):
         """
             Verifies that path specified by `path` is a valid path, and its cost matches est_cost.
         """
 
-        graph = extract_input(os.path.join(get_path("inputs"), self.input_filename))
+        graph = extract_input(self.get_input_abspath())
 
         path_nodes = path.split()
         cost = 0
