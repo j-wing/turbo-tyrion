@@ -74,7 +74,7 @@ class InputGraph(models.Model):
 
         graph = extract_input(os.path.join(get_path("inputs"), self.input_filename))
 
-        path_nodes = path.split(" ")
+        path_nodes = path.split()
         cost = 0
         reason = None
 
