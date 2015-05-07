@@ -33,12 +33,15 @@ def index(request):
 def claim_new_graphs(request):
     number = int(request.GET.get("number", 1))
     test_only = bool(request.GET.get("test_only", False))
+    algo = None
+
     if request.GET.get("algo_id"):
-        algo = get_object_or_404(Algorithm, pk=int(request.GET["algo_id"]))
+        algo = Algorithm.objects.filter(pk=int(request.GET["algo_id"]))
     elif request.GET.get("algo_command"):
-        algo = get_object_or_404(Algorithm, command=request.GET["algo_command"])
-    else:
-        algo = None
+        algo = Algorithm.objects.filter(command=request.GET["algo_command"])
+
+    if algo is not None and len(algo) > 0:
+        algo = algo.first()
 
     if test_only:
         ids = InputGraph.objects.filter(is_test_graph=True).order_by('num_vars')
