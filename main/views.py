@@ -33,17 +33,32 @@ def index(request):
 def claim_new_graphs(request):
     number = int(request.GET.get("number", 1))
     test_only = bool(request.GET.get("test_only", False))
+    if request.GET.get("algo_id"):
+        algo = get_object_or_404(Algorithm, pk=int(request.GET["algo_id"]))
+    elif request.GET.get("algo_command"):
+        algo = get_object_or_404(Algorithm, command=request.GET["algo_command"])
+    else:
+        algo = None
 
     if test_only:
         ids = InputGraph.objects.filter(is_test_graph=True).order_by('num_vars')
 
     else:
         graphs = InputGraph.get_not_running().exclude(is_test_graph=True).filter(last_run_end=None).order_by(
-            'num_vars', "-current_best__path_cost")[:number]
+            'num_vars', "-current_best__path_cost")
+        if algo:
+            graphs = graphs.exclude(current_best__algo=algo)
+        graphs = graphs[:number]
+
         ids = [g.pk for g in graphs]
         if len(graphs) < number:
             from_all = InputGraph.objects.exclude(id__in=ids).exclude(is_test_graph=True).order_by(
-                    "-current_best__path_cost")[:(number - len(graphs))]
+                    "-current_best__path_cost")
+
+            if algo:
+                from_all = from_all.exclude(current_best__algo=algo)
+
+            from_all = from_all[:(number - len(graphs))]
 
             ids.extend([g.pk for g in from_all])
         
