@@ -19,7 +19,15 @@ def main(fname):
         for line in range(1, len(graphs)+1):
             output = linenums[line].current_best.output_file
             output.open()
-            f.write(output.read())
+            contents = output.read()
+            try:
+                l = eval(contents)
+            except SyntaxError:
+                pass
+            else:
+                contents = " ".join((str(x) for x in l))
+
+            f.write(contents)
             if line != len(graphs):
                 f.write("\n")
             output.close()
