@@ -22,7 +22,6 @@ def main(fname):
             f.write(contents)
             if line != len(graphs):
                 f.write("\n")
-            output.close()
 
     print "Wrote to", fname
     print "Verifying contents..."
