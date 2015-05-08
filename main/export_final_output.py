@@ -17,20 +17,53 @@ def main(fname):
 
     with open(fname, "w") as f:
         for line in range(1, len(graphs)+1):
-            output = linenums[line].current_best.output_file
-            output.open()
-            contents = output.read()
-            try:
-                l = eval(contents)
-            except SyntaxError:
-                pass
-            else:
-                contents = " ".join((str(x) for x in l))
+            contents = get_contents(linenums, line)
 
             f.write(contents)
             if line != len(graphs):
                 f.write("\n")
             output.close()
+
+    print "Wrote to", fname
+    print "Verifying contents..."
+
+    with open(fname, "r") as f:
+        had_error = False
+        for i, line in enumerate(f):
+            graph = linenums[i]
+
+            contents = get_contents(linenums, i)
+            if contents != line:
+                had_error = True
+                print_badness(i, line, contents, "")
+
+            valid, reason = graph.verify_solution(line, graph.current_best.path_cost)
+            if not valid:
+                print_badness(i, line, contents, reason)
+                had_error = True
+        if not had_error:
+            print "Success!"
+
+
+def get_contents(linenums, line):
+    output = linenums[line].current_best.output_file
+    output.open()
+    contents = output.read()
+    try:
+        l = eval(contents)
+    except SyntaxError:
+        pass
+    else:
+        contents = " ".join((str(x) for x in l))
+    output.close()
+    return contents
+
+
+def print_badness(lineno, line, contents, reason):
+        print "INVALID: line no.", lineno
+        print "In answer.out:", line
+        print "In graph:", contents
+        print "Reason was:", reason
 
 
 if __name__ == '__main__':
