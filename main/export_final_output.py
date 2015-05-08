@@ -17,11 +17,11 @@ def main(fname):
 
     with open(fname, "w") as f:
         for line in range(1, len(graphs)+1):
-            with linenums[line].current_best.output_file.open() as output:
-                f.write(output.read())
-                if line != len(graphs):
-                    f.write("\n")
-
+            output = linenums[line].current_best.output_file.open()
+            f.write(output.read())
+            if line != len(graphs):
+                f.write("\n")
+            output.close()
 
 
 if __name__ == '__main__':
