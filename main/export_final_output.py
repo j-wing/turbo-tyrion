@@ -32,7 +32,7 @@ def main(fname):
             graph = linenums[i]
 
             contents = get_contents(linenums, i)
-            if contents != line:
+            if contents.strip() != line:
                 had_error = True
                 print_badness(i, line, contents, "")
 
