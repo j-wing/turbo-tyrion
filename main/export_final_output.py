@@ -31,10 +31,10 @@ def main(fname):
         for i, line in enumerate(f, 1):
             graph = linenums[i]
 
-            contents = get_contents(linenums, i)
-            if contents.strip() != line:
-                had_error = True
-                print_badness(i, line, contents, "")
+            # contents = get_contents(linenums, i)
+            # if contents.strip() != line:
+            #     had_error = True
+            #     print_badness(i, line, contents, "")
 
             valid, reason = graph.verify_solution(line, graph.current_best.path_cost)
             if not valid:
@@ -54,6 +54,17 @@ def get_contents(linenums, line):
         pass
     else:
         contents = " ".join((str(x) for x in l))
+
+    split = contents.strip().split()
+    if '0' in split:
+        res = []
+        for num in split:
+            i = int(num)
+            res.append(i + 1)
+        contents = " ".join((str(x) for x in l))
+
+
+
     output.close()
     return contents
 
