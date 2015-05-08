@@ -28,7 +28,7 @@ def main(fname):
 
     with open(fname, "r") as f:
         had_error = False
-        for i, line in enumerate(f):
+        for i, line in enumerate(f, 1):
             graph = linenums[i]
 
             contents = get_contents(linenums, i)
