@@ -20,7 +20,9 @@ def index(request):
     num_running = InputGraph.get_running().count()
     num_solved = InputGraph.objects.exclude(current_best=None).count()
     percent_solved = round(10000 * float(num_solved) / float(total_graphs)) / 100
-    best_algos = Algorithm.objects.annotate(num_solved=Count("graphscore__graph__current_best")).order_by("-num_solved")[:3]
+    best_algos = Algorithm.objects.annotate(
+                    bests=Count('graphscore__inputgraph__current_best')).exclude(bests=0).order_by("-bests")[:3]
+    #Algorithm.objects.annotate(num_solved=Count("graphscore__graph__current_best")).order_by("-num_solved")[:3]
     return render(request, "index.html", {
         'graphs':graphs, 
         'num_running':num_running,
